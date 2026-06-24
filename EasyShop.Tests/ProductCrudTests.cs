@@ -1,7 +1,6 @@
-using EasyShop.Core.Models;
-using EasyShop.Core.Services;
+using EasyShop.Controllers;
 using EasyShop.Data;
-using EasyShop.Data.Implementations;
+using EasyShop.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EasyShop.Tests;
@@ -21,8 +20,7 @@ public class ProductCrudTests
     public void AddProduct_ShouldSaveToDatabase()
     {
         var context = CreateContext("Test_AddProduct");
-        var unitOfWork = new UnitOfWork(context);
-        var service = new ProductService(unitOfWork);
+        var controller = new ProductsController(context);
 
         var product = new Product
         {
@@ -33,7 +31,7 @@ public class ProductCrudTests
             Category = "Test"
         };
 
-        service.AddProduct(product);
+        controller.Add(product);
 
         Assert.That(product.ProductId, Is.GreaterThan(0));
     }
@@ -42,8 +40,7 @@ public class ProductCrudTests
     public void GetProductById_ShouldReturnCorrectProduct()
     {
         var context = CreateContext("Test_GetProduct");
-        var unitOfWork = new UnitOfWork(context);
-        var service = new ProductService(unitOfWork);
+        var controller = new ProductsController(context);
 
         var product = new Product
         {
@@ -54,8 +51,8 @@ public class ProductCrudTests
             Category = "Electronics"
         };
 
-        service.AddProduct(product);
-        var result = service.GetProductById(product.ProductId);
+        controller.Add(product);
+        var result = controller.GetById(product.ProductId);
 
         Assert.That(result, Is.Not.Null);
         Assert.Multiple(() =>
@@ -70,8 +67,7 @@ public class ProductCrudTests
     public void UpdateProduct_ShouldModifyExistingProduct()
     {
         var context = CreateContext("Test_UpdateProduct");
-        var unitOfWork = new UnitOfWork(context);
-        var service = new ProductService(unitOfWork);
+        var controller = new ProductsController(context);
 
         var product = new Product
         {
@@ -82,14 +78,14 @@ public class ProductCrudTests
             Category = "Old"
         };
 
-        service.AddProduct(product);
+        controller.Add(product);
 
         product.Name = "Updated Name";
         product.Price = 200m;
         product.Quantity = 5;
-        service.UpdateProduct(product);
+        controller.Update(product);
 
-        var updated = service.GetProductById(product.ProductId);
+        var updated = controller.GetById(product.ProductId);
 
         Assert.That(updated, Is.Not.Null);
         Assert.Multiple(() =>
@@ -104,8 +100,7 @@ public class ProductCrudTests
     public void DeleteProduct_ShouldRemoveFromDatabase()
     {
         var context = CreateContext("Test_DeleteProduct");
-        var unitOfWork = new UnitOfWork(context);
-        var service = new ProductService(unitOfWork);
+        var controller = new ProductsController(context);
 
         var product = new Product
         {
@@ -116,12 +111,12 @@ public class ProductCrudTests
             Category = "Test"
         };
 
-        service.AddProduct(product);
-        Assert.That(service.GetAllProducts().Count(), Is.EqualTo(1));
+        controller.Add(product);
+        Assert.That(controller.GetAll().Count, Is.EqualTo(1));
 
-        service.DeleteProduct(product.ProductId);
+        controller.Delete(product.ProductId);
 
-        var allProducts = service.GetAllProducts();
-        Assert.That(allProducts.Count(), Is.EqualTo(0));
+        var allProducts = controller.GetAll();
+        Assert.That(allProducts.Count, Is.EqualTo(0));
     }
 }

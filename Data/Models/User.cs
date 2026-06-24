@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace EasyShop.Core.Models;
+namespace EasyShop.Data.Models;
 
 public class User
 {

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EasyShop.Core.Models;
+namespace EasyShop.Data.Models;
 
 public class Product
 {
