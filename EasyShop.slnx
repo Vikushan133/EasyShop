@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="EasyShop.Console/EasyShop.Console.csproj" />
+  <Project Path="EasyShop.Core/EasyShop.Core.csproj" />
+  <Project Path="EasyShop.Data/EasyShop.Data.csproj" />
+  <Project Path="EasyShop.Tests/EasyShop.Tests.csproj" />
+</Solution>
